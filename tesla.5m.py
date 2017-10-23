@@ -318,8 +318,6 @@ def main():
             drive_state = vehicle.data_request('drive_state')
             gui_settings = vehicle.data_request('gui_settings')
 
-            TEMP_UNIT = gui_settings['gui_temperature_units']
-
             print ('%s%s %s%%| color=%s' % (prefix, battery_str, str(charge_state['battery_level']), color))
 
             # The default charge state text
@@ -329,8 +327,9 @@ def main():
                 # Calculate the wattage ourself for more signifiant digits
                 v = charge_state['charger_voltage']
                 a = charge_state['charger_actual_current']
-                if v and a:
-                    rate = float(v * a) / 1000.0
+                p = charge_state['charger_phases']
+                if v and a and p:
+                    rate = float(v * a * p) / 1000.0
                 else:
                     rate = 0
                 added = charge_state['charge_energy_added']
